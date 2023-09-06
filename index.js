@@ -1,7 +1,7 @@
 import axios from 'axios'
 import * as cheerio from 'cheerio'
 
-const fetchLinksFromPage = async (baseURL) => {
+const fetchCompanyLinksFromSearchList = async (baseURL) => {
     const links = []
 
     let i = 1;
@@ -48,7 +48,7 @@ const fetchLinksFromPage = async (baseURL) => {
     return links
 }
 
-const fetchEmailFromPage = async (path) => {
+const fetchCompanyPage = async (path) => {
     const headers = {
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/115.0' ,
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
@@ -65,28 +65,91 @@ const fetchEmailFromPage = async (path) => {
     }
     
     const url = `https://www.finder.fi${path}`
-    const html = await axios.get(url, {
-        headers
-    })
+    const html = await axios.get(url, { headers })
         .then(res => res.data)
 
 
     const $ = cheerio.load(html)
-    const mail = $('.listing-email').attr('href')
-    console.log(mail);
+    const name = $('.Profile__Name').text()
+
+    const companyid = $('.CopyButton').parent().text().split(" ")[2]
+
+    const address = $('.SearchResult__Link, .listing-street-address').text()
+
+    const mail = $('.listing-email').text()
+
+    const site = $('.listing-website-url').text()
+
+    const yearEnd = $('.Financials__Table thead th').map((_, el) => $(el).text()).toArray().slice(1)
+
+    const financialDataByKey = (key) => {
+        return $('.Financials__Table tbody th')
+            .filter((_, el) => $(el).text() === key)
+            .parent()
+            .find('td')
+            .map((_, el) => $(el).text())
+            .toArray()
+    }
+
+    const financialData = {
+        yearEnd,
+        revenue: financialDataByKey('Liikevaihto (tuhatta euroa)'),
+        employees: financialDataByKey('Henkilöstö'),
+        operatingProfit: financialDataByKey('Liiketulos (tuhatta euroa)'),
+        shareholdersEquity: financialDataByKey('Oma pääoma yhteensä (tuhatta euroa)'),
+    }
+
+    const getCompanyData = (key) => {
+        return $('.ServerOnly dt').filter((_, el) => $(el).text() === key).next().text().replace('Lähde: YTJ', '')
+    }
+
+    const companyType = getCompanyData('Yhtiömuoto')
+
+    const location = getCompanyData('Kotipaikka')
+
         
-    return mail
+    return {
+        name,
+        companyType,
+        location,
+        companyid,
+        address,
+        mail,
+        site,
+        financialData
+    }
+}
+
+const flattenCompanyData = (companyData) => {
+    Object.keys(companyData.financialData).forEach(key => {
+        companyData.financialData[key] = companyData.financialData[key].slice(-1)[0] // get last element of arr
+    });
+    const flattenCompanyData = {
+        ...companyData,
+        ...companyData.financialData,
+        financialData: undefined
+    }
+
+    Object.entries(flattenCompanyData).map(([i, el]) => {
+        if (el === undefined | el === null) {
+            delete flattenCompanyData[i]
+        }
+    })
+
+    return flattenCompanyData
 }
 
 const app = async () => {
-    const links = await fetchLinksFromPage('https://www.finder.fi/search?what=kirkkonummi%20rakennusliike')
+    const links = await fetchCompanyLinksFromSearchList('https://www.finder.fi/search?what=kirkkonummi%20rakennusliike')
 
     for (const link of links) {
-        console.log(link);
-        const email = await fetchEmailFromPage(link)
-        console.log(email);
+        const companyData = await fetchCompanyPage(link)
+        console.log(companyData);
+        console.log(flattenCompanyData(companyData));
     }
     
+    // const companyData = await fetchCompanyPage('/Kivet+kivimateriaalit+ja+kiviasennukset/Ylivieskan+Kivihiomo+Oy/Ylivieska/yhteystiedot/422050')
+
 }
 
 app()
