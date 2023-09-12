@@ -1,5 +1,7 @@
 import axios from 'axios'
 import * as cheerio from 'cheerio'
+import fs from 'fs'
+import Papa from 'papaparse'
 
 const fetchCompanyLinksFromSearchList = async (baseURL) => {
     const links = []
@@ -49,6 +51,7 @@ const fetchCompanyLinksFromSearchList = async (baseURL) => {
 }
 
 const fetchCompanyPage = async (path) => {
+    console.log("fetching", path);
     const headers = {
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/115.0' ,
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
@@ -139,17 +142,27 @@ const flattenCompanyData = (companyData) => {
     return flattenCompanyData
 }
 
+const delay = () => {
+    return new Promise(resolve => {
+        setTimeout(resolve, Math.random() * 2 * 1000)
+    })
+}
+
 const app = async () => {
-    const links = await fetchCompanyLinksFromSearchList('https://www.finder.fi/search?what=kirkkonummi%20rakennusliike')
+    let links = await fetchCompanyLinksFromSearchList('https://www.finder.fi/search?what=IT-palvelut+Espoo')
 
+    const companies = []
     for (const link of links) {
+        await delay()
         const companyData = await fetchCompanyPage(link)
-        console.log(companyData);
-        console.log(flattenCompanyData(companyData));
+        const flatCompanyData = flattenCompanyData(companyData)
+        companies.push(flatCompanyData)
     }
-    
-    // const companyData = await fetchCompanyPage('/Kivet+kivimateriaalit+ja+kiviasennukset/Ylivieskan+Kivihiomo+Oy/Ylivieska/yhteystiedot/422050')
 
+    const csv = Papa.unparse(companies);
+    fs.writeFileSync('companies.csv', csv)
+    console.log("done!");
+    process.exit()
 }
 
 app()
