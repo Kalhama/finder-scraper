@@ -50,8 +50,7 @@ const fetchCompanyLinksFromSearchList = async (baseURL) => {
     return links
 }
 
-const fetchCompanyPage = async (path) => {
-    console.log("fetching", path);
+const fetchCompanyPageFromFinder = async (path) => {
     const headers = {
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/115.0' ,
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
@@ -123,14 +122,18 @@ const fetchCompanyPage = async (path) => {
     }
 }
 
-const flattenCompanyData = (companyData) => {
-    Object.keys(companyData.financialData).forEach(key => {
-        companyData.financialData[key] = companyData.financialData[key].slice(-1)[0] // get last element of arr
+const flattenCompanyData = (finderdata, ytjdata) => {
+    Object.keys(finderdata.financialData).forEach(key => {
+        finderdata.financialData[key] = finderdata.financialData[key].slice(-1)[0] // get last element of arr
     });
+
+
     const flattenCompanyData = {
-        ...companyData,
-        ...companyData.financialData,
-        financialData: undefined
+        ...finderdata,
+        ...finderdata.financialData,
+        financialData: undefined,
+        ytjemail: new Buffer(ytjdata?.contactDetails?.email?.value || '', 'base64').toString('utf8'),
+        // ytjphone: new Buffer(ytjdata.contactDetails.telephone.value, 'base64').toString('utf8'),
     }
 
     Object.entries(flattenCompanyData).map(([i, el]) => {
@@ -144,19 +147,36 @@ const flattenCompanyData = (companyData) => {
 
 const delay = () => {
     return new Promise(resolve => {
-        setTimeout(resolve, Math.random() * 2 * 1000)
+        setTimeout(resolve, Math.random() * 5 * 1000)
     })
+}
+
+const fetchCompanyDataFromYTJ = async (companyId) => {
+    const data = await axios.get(`https://tietopalvelu.ytj.fi/api/api/Company/${companyId}?language=fi`).then(res => res.data)
+
+    return data
 }
 
 const app = async () => {
     let links = await fetchCompanyLinksFromSearchList('https://www.finder.fi/search?what=IT-palvelut+Espoo')
 
     const companies = []
-    for (const link of links) {
+    for (const [i, link] of links.entries()) {
+        console.log(i + 1, links.length, link);
         await delay()
-        const companyData = await fetchCompanyPage(link)
-        const flatCompanyData = flattenCompanyData(companyData)
-        companies.push(flatCompanyData)
+        try {
+
+            const finderData = await fetchCompanyPageFromFinder(link)
+            const ytjData = await fetchCompanyDataFromYTJ(finderData.companyid)
+
+            // console.log(ytjData);
+
+            const flatCompanyData = flattenCompanyData(finderData, ytjData)
+            console.log(flatCompanyData);
+            companies.push(flatCompanyData)
+        } catch(e) {
+            console.error("error", e)
+        }
     }
 
     const csv = Papa.unparse(companies);
