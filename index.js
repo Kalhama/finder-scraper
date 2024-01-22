@@ -9,6 +9,7 @@ const fetchCompanyLinksFromSearchList = async (baseURL) => {
     let i = 1;
     while (true) {
         console.log(`Fetching page ${i}`)
+        await delay();
 
         const url = `${baseURL}&page=${i}`
         const headers = {
@@ -124,23 +125,17 @@ const fetchCompanyPageFromFinder = async (path) => {
 
 const flattenCompanyData = (finderdata, ytjdata) => {
     Object.keys(finderdata.financialData).forEach(key => {
-        finderdata.financialData[key] = finderdata.financialData[key].slice(-1)[0] // get last element of arr
+        finderdata.financialData[key] = finderdata.financialData[key].slice(-1)[0] || '' // get last element of arr
     });
 
 
     const flattenCompanyData = {
         ...finderdata,
         ...finderdata.financialData,
-        financialData: undefined,
+        financialData: '',
         ytjemail: new Buffer(ytjdata?.contactDetails?.email?.value || '', 'base64').toString('utf8'),
-        // ytjphone: new Buffer(ytjdata.contactDetails.telephone.value, 'base64').toString('utf8'),
+        ytjphone: new Buffer(ytjdata?.contactDetails?.telephone?.value || ytjdata?.contactDetails?.mobilePhone?.value || '' , 'base64').toString('utf8'),
     }
-
-    Object.entries(flattenCompanyData).map(([i, el]) => {
-        if (el === undefined | el === null) {
-            delete flattenCompanyData[i]
-        }
-    })
 
     return flattenCompanyData
 }
@@ -158,7 +153,7 @@ const fetchCompanyDataFromYTJ = async (companyId) => {
 }
 
 const app = async () => {
-    let links = await fetchCompanyLinksFromSearchList('https://www.finder.fi/search?what=IT-palvelut+Espoo')
+    let links = await fetchCompanyLinksFromSearchList('https://www.finder.fi/search?what=mainostoimisto%20helsinki')
 
     const companies = []
     for (const [i, link] of links.entries()) {
@@ -168,11 +163,7 @@ const app = async () => {
 
             const finderData = await fetchCompanyPageFromFinder(link)
             const ytjData = await fetchCompanyDataFromYTJ(finderData.companyid)
-
-            // console.log(ytjData);
-
             const flatCompanyData = flattenCompanyData(finderData, ytjData)
-            console.log(flatCompanyData);
             companies.push(flatCompanyData)
         } catch(e) {
             console.error("error", e)
