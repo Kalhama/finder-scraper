@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "commonjs",
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "noImplicitAny": true,
+    "sourceMap": true
+  },
+  "include": [
+    "**/*.ts",
+    "src/config.mjs"
+  ],
+  "exclude": ["node_modules"]
+}
