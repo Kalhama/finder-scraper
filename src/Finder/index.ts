@@ -1,8 +1,34 @@
 import axios from 'axios'
 import * as cheerio from 'cheerio'
 
+type GetCompanyReturn = Promise<{
+  name: string
+  companyType: string
+  location: string
+  companyid: string
+  address: string
+  mail: string
+  site: string
+  financialData: {
+    yearEnd: string[]
+    revenue: string[]
+    employees: string[]
+    operatingProfit: string[]
+    shareholdersEquity: string[]
+  }
+}>
+
 export class Finder {
-  public static async searchCompanies(baseURL: string, page: number) {
+  /**
+   *
+   * @param {string} baseURL - URL with what query param ex. https://www.finder.fi/search?what=IT-palvelut+Espoo
+   * @param {number} page - page number of results
+   * @returns {Promise<string[]>} company paths's. ex. `["/Televiestint%C3%A4+televiestint%C3%A4palvelut/Nokia+Oyj/Espoo/yhteystiedot/159843"]`
+   */
+  public static async searchCompanies(
+    baseURL: string,
+    page: number
+  ): Promise<string[]> {
     const links = []
 
     const url = `${baseURL}&page=${page}`
@@ -44,7 +70,12 @@ export class Finder {
     return links
   }
 
-  public static async getCompany(path: string) {
+  /**
+   *
+   * @param {string} path - URL without base. ex. `/Televiestint%C3%A4+televiestint%C3%A4palvelut/Nokia+Oyj/Espoo/yhteystiedot/159843`
+   * @returns {GetCompanyReturn}
+   */
+  public static async getCompany(path: string): GetCompanyReturn {
     const headers = {
       'User-Agent':
         'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/115.0',
