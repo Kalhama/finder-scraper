@@ -3,7 +3,7 @@ import queryString from 'query-string'
 
 import { BisCompany, BisCompanyDetails, YTJRespomse } from './interfaces'
 
-type CompanyForm = 'AOY' | 'OYJ' | 'OY' | 'OK' | 'VOJ'
+export type CompanyForm = 'AOY' | 'OYJ' | 'OY' | 'OK' | 'VOJ'
 
 export class YTJ {
   /**

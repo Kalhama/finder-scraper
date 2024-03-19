@@ -8,7 +8,8 @@
   "license": "MIT",
   "scripts": {
     "start": "ts-node src/index.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "docs": "typedoc --plugin typedoc-plugin-markdown src/index.ts"
   },
   "dependencies": {
     "axios": "^1.4.0",
@@ -27,6 +28,8 @@
     "eslint": "^8.57.0",
     "node-dev": "^8.0.0",
     "prettier": "^3.2.5",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "typedoc": "^0.25.12",
+    "typedoc-plugin-markdown": "^3.17.1"
   }
 }

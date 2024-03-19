@@ -1,7 +1,7 @@
 import axios from 'axios'
 import * as cheerio from 'cheerio'
 
-type GetCompanyReturn = Promise<{
+export type GetCompanyReturn = Promise<{
   name: string
   companyType: string
   location: string
