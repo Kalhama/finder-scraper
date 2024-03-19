@@ -5,11 +5,12 @@
     "removeComments": true,
     "preserveConstEnums": true,
     "noImplicitAny": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "outDir": "dist/"
   },
   "include": [
     "**/*.ts",
     "src/config.mjs"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
 }

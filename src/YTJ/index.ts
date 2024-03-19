@@ -32,3 +32,5 @@ export class YTJ {
     ).then((res) => res.json() as Promise<YTJRespomse<BisCompany[]>>)
   }
 }
+
+export * from './interfaces'
