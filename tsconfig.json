@@ -1,12 +1,13 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "commonjs",
+    "target": "ES6",
+    "module": "NodeNext",
     "removeComments": false,
     "preserveConstEnums": true,
     "noImplicitAny": true,
     "sourceMap": true,
-    "outDir": "dist/"
+    "outDir": "dist/",
+    "moduleResolution": "NodeNext"
   },
   "include": [
     "**/*.ts",

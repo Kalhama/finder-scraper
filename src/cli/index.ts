@@ -1,178 +1,38 @@
-import axios from 'axios'
-import * as cheerio from 'cheerio'
+import { program } from 'commander'
 import * as fs from 'fs'
-import * as Papa from 'papaparse'
+import Papa from 'papaparse'
 
-const fetchCompanyLinksFromSearchList = async (baseURL: string) => {
-  const links = []
+import { Finder, FinderCompany } from '../Finder/index.js'
+import { YTJ, YTJCompanyDetails } from '../YTJ/index.js'
 
-  let i = 1
-  while (true) {
-    console.log(`Fetching page ${i}`)
-    await delay()
-
-    const url = `${baseURL}&page=${i}`
-    const headers = {
-      'User-Agent':
-        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/115.0',
-      Accept:
-        'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
-      'Accept-Language': 'en-US,en;q=0.5',
-      'Accept-Encoding': 'gzip, deflate, br',
-      DNT: '1',
-      Connection: 'keep-alive',
-      Cookie:
-        'session=s%3APPC-IsHQADUivTp9UkEg9-Y1LH6wkqw7.Q%2FRstJwXD3ezFHTCI1m%2F9wDZgvEr8hVRDfFIW9mmWBo',
-      'Upgrade-Insecure-Requests': '1',
-      'Sec-Fetch-Dest': 'document',
-      'Sec-Fetch-Mode': 'navigate',
-      'Sec-Fetch-Site': 'none',
-      'Sec-Fetch-User': '?1',
-    }
-
-    const data = await axios
-      .get(url, {
-        headers,
-      })
-      .then((res) => res.data)
-
-    // parse pages
-    const $ = cheerio.load(data)
-    const linksOnPage = $('.SearchResult__ProfileLink')
-      .map(function () {
-        const href = $(this).attr('href')
-        return href
-      })
-      .toArray()
-
-    if (linksOnPage.length === 0) {
-      break
-    }
-
-    links.push(...linksOnPage)
-
-    i++
-  }
-
-  return links
-}
-
-const fetchCompanyPageFromFinder = async (path: string) => {
-  const headers = {
-    'User-Agent':
-      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/115.0',
-    Accept:
-      'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
-    'Accept-Language': 'en-US,en;q=0.5',
-    'Accept-Encoding': 'gzip, deflate, br',
-    DNT: '1',
-    Connection: 'keep-alive',
-    Cookie:
-      'session=s%3APPC-IsHQADUivTp9UkEg9-Y1LH6wkqw7.Q%2FRstJwXD3ezFHTCI1m%2F9wDZgvEr8hVRDfFIW9mmWBo',
-    'Upgrade-Insecure-Requests': '1',
-    'Sec-Fetch-Dest': 'document',
-    'Sec-Fetch-Mode': 'navigate',
-    'Sec-Fetch-Site': 'none',
-    'Sec-Fetch-User': '?1',
-  }
-
-  const url = `https://www.finder.fi${path}`
-  const html = await axios.get(url, { headers }).then((res) => res.data)
-
-  const $ = cheerio.load(html)
-  const name = $('.Profile__Name').text()
-
-  const companyid = $('.CopyButton').parent().text().split(' ')[2]
-
-  const address = $('.SearchResult__Link, .listing-street-address').text()
-
-  const mail = $('.listing-email').text()
-
-  const site = $('.listing-website-url').text()
-
-  const yearEnd = $('.Financials__Table thead th')
-    .map((_, el) => $(el).text())
-    .toArray()
-    .slice(1)
-
-  const financialDataByKey = (key: string) => {
-    return $('.Financials__Table tbody th')
-      .filter((_, el) => $(el).text() === key)
-      .parent()
-      .find('td')
-      .map((_, el) => $(el).text())
-      .toArray()
-  }
-
-  const financialData = {
-    yearEnd,
-    revenue: financialDataByKey('Liikevaihto (tuhatta euroa)'),
-    employees: financialDataByKey('Henkilöstö'),
-    operatingProfit: financialDataByKey('Liiketulos (tuhatta euroa)'),
-    shareholdersEquity: financialDataByKey(
-      'Oma pääoma yhteensä (tuhatta euroa)'
-    ),
-  }
-
-  const getCompanyData = (key: string) => {
-    return $('.ServerOnly dt')
-      .filter((_, el) => $(el).text() === key)
-      .next()
-      .text()
-      .replace('Lähde: YTJ', '')
-  }
-
-  const companyType = getCompanyData('Yhtiömuoto')
-
-  const location = getCompanyData('Kotipaikka')
-
-  return {
-    name,
-    companyType,
-    location,
-    companyid,
-    address,
-    mail,
-    site,
-    financialData,
-  }
+const delay = async (time = 5000) => {
+  await new Promise((resolve) => setTimeout(resolve, time))
 }
 
 const flattenCompanyData = (
-  finderdata: {
-    name?: string
-    companyType?: string
-    location?: string
-    companyid?: string
-    address?: string
-    mail?: string
-    site?: string
-    financialData: any
-  },
-  ytjdata: {
-    contactDetails: {
-      email: { value: any }
-      telephone: { value: any }
-      mobilePhone: { value: any }
-    }
-  }
+  finderdata: FinderCompany,
+  ytjdata: YTJCompanyDetails
 ) => {
-  Object.keys(finderdata.financialData).forEach((key) => {
-    finderdata.financialData[key] =
-      finderdata.financialData[key].slice(-1)[0] || '' // get last element of arr
-  })
+  const latestFinancials = {
+    yearEnd: finderdata.financialData.yearEnd.slice(-1)[0],
+    revenue: finderdata.financialData.revenue.slice(-1)[0],
+    employees: finderdata.financialData.employees.slice(-1)[0],
+    operatingProfit: finderdata.financialData.operatingProfit.slice(-1)[0],
+    shareholdersEquity:
+      finderdata.financialData.shareholdersEquity.slice(-1)[0],
+  }
 
   const flattenCompanyData = {
     ...finderdata,
-    ...finderdata.financialData,
     financialData: '',
+    ...latestFinancials,
     ytjemail: new Buffer(
-      ytjdata?.contactDetails?.email?.value || '',
+      ytjdata?.contactDetails?.find((d) => d.type === 'email')?.value || '',
       'base64'
     ).toString('utf8'),
     ytjphone: new Buffer(
-      ytjdata?.contactDetails?.telephone?.value ||
-        ytjdata?.contactDetails?.mobilePhone?.value ||
+      ytjdata?.contactDetails?.find((d) => d.type === 'telephone')?.value ||
+        ytjdata?.contactDetails?.find((d) => d.type === 'mobilePhone')?.value ||
         '',
       'base64'
     ).toString('utf8'),
@@ -181,43 +41,29 @@ const flattenCompanyData = (
   return flattenCompanyData
 }
 
-const delay = () => {
-  return new Promise((resolve) => {
-    setTimeout(resolve, Math.random() * 5 * 1000)
+program
+  .arguments('<url>')
+  .arguments('<output>')
+  .action(async (url: string, output: string) => {
+    let companiesInPage: string[] = []
+    let page = 1
+    let companies: Array<ReturnType<typeof flattenCompanyData>> = []
+    do {
+      companiesInPage = await Finder.searchCompanies(url, page)
+      await delay(5000)
+      page++
+
+      for (const company of companiesInPage) {
+        const finderData = await Finder.getCompany(company)
+        const { results: YTJData } = await YTJ.getCompany(finderData.companyid)
+        const flatCompanyData = flattenCompanyData(finderData, YTJData)
+        companies.push(flatCompanyData)
+      }
+    } while (companiesInPage.length !== 0)
+
+    const csv = Papa.unparse(companies)
+    fs.writeFileSync('companies.csv', csv)
+    process.exit()
   })
-}
 
-const fetchCompanyDataFromYTJ = async (companyId: string) => {
-  const data = await axios
-    .get(`https://tietopalvelu.ytj.fi/api/api/Company/${companyId}?language=fi`)
-    .then((res) => res.data)
-
-  return data
-}
-
-export const cli = async () => {
-  let links = await fetchCompanyLinksFromSearchList(
-    'https://www.finder.fi/search?what=mainostoimisto%20helsinki&type=company'
-  )
-
-  const companies = []
-  for (const [i, link] of links.entries()) {
-    console.log(i + 1, links.length, link)
-    await delay()
-    try {
-      const finderData = await fetchCompanyPageFromFinder(link)
-      const ytjData = await fetchCompanyDataFromYTJ(finderData.companyid)
-      const flatCompanyData = flattenCompanyData(finderData, ytjData)
-      companies.push(flatCompanyData)
-    } catch (e) {
-      console.error('error', e)
-    }
-  }
-
-  const csv = Papa.unparse(companies)
-  fs.writeFileSync('companies.csv', csv)
-  console.log('done!')
-  process.exit()
-}
-
-cli()
+program.parse(process.argv)
