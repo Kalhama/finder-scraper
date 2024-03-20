@@ -27,7 +27,7 @@
 
 ### getCompany
 
-▸ **getCompany**(`businessId`): `Promise`\<[`YTJRespomse`](../interfaces/YTJRespomse.md)\<[`BisCompanyDetails`](../interfaces/BisCompanyDetails.md)\>\>
+▸ **getCompany**(`businessId`): `Promise`\<[`YTJRespomse`](../interfaces/YTJRespomse.md)\<[`YTJCompanyDetails`](../interfaces/YTJCompanyDetails.md)\>\>
 
 #### Parameters
 
@@ -37,17 +37,17 @@
 
 #### Returns
 
-`Promise`\<[`YTJRespomse`](../interfaces/YTJRespomse.md)\<[`BisCompanyDetails`](../interfaces/BisCompanyDetails.md)\>\>
+`Promise`\<[`YTJRespomse`](../interfaces/YTJRespomse.md)\<[`YTJCompanyDetails`](../interfaces/YTJCompanyDetails.md)\>\>
 
 #### Defined in
 
-[YTJ/index.ts:14](https://github.com/launde/finder-scraper/blob/a5244be/src/YTJ/index.ts#L14)
+[YTJ/index.ts:14](https://github.com/launde/finder-scraper/blob/4aa87da/src/YTJ/index.ts#L14)
 
 ___
 
 ### searchCompanies
 
-▸ **searchCompanies**(`maxResults`, `resultsFrom`, `companyForm?`): `Promise`\<[`YTJRespomse`](../interfaces/YTJRespomse.md)\<[`BisCompany`](../interfaces/BisCompany.md)[]\>\>
+▸ **searchCompanies**(`maxResults`, `resultsFrom`, `companyForm?`): `Promise`\<[`YTJRespomse`](../interfaces/YTJRespomse.md)\<[`YTJCompany`](../interfaces/YTJCompany.md)[]\>\>
 
 #### Parameters
 
@@ -59,8 +59,8 @@ ___
 
 #### Returns
 
-`Promise`\<[`YTJRespomse`](../interfaces/YTJRespomse.md)\<[`BisCompany`](../interfaces/BisCompany.md)[]\>\>
+`Promise`\<[`YTJRespomse`](../interfaces/YTJRespomse.md)\<[`YTJCompany`](../interfaces/YTJCompany.md)[]\>\>
 
 #### Defined in
 
-[YTJ/index.ts:30](https://github.com/launde/finder-scraper/blob/a5244be/src/YTJ/index.ts#L30)
+[YTJ/index.ts:32](https://github.com/launde/finder-scraper/blob/4aa87da/src/YTJ/index.ts#L32)

@@ -27,7 +27,7 @@
 
 ### getCompany
 
-▸ **getCompany**(`path`): [`GetCompanyReturn`](../modules.md#getcompanyreturn)
+▸ **getCompany**(`path`): `Promise`\<[`FinderCompany`](../modules.md#findercompany)\>
 
 #### Parameters
 
@@ -37,11 +37,11 @@
 
 #### Returns
 
-[`GetCompanyReturn`](../modules.md#getcompanyreturn)
+`Promise`\<[`FinderCompany`](../modules.md#findercompany)\>
 
 #### Defined in
 
-[Finder/index.ts:78](https://github.com/launde/finder-scraper/blob/a5244be/src/Finder/index.ts#L78)
+[Finder/index.ts:74](https://github.com/launde/finder-scraper/blob/4aa87da/src/Finder/index.ts#L74)
 
 ___
 
@@ -64,4 +64,4 @@ company paths's. ex. `["/Televiestint%C3%A4+televiestint%C3%A4palvelut/Nokia+Oyj
 
 #### Defined in
 
-[Finder/index.ts:28](https://github.com/launde/finder-scraper/blob/a5244be/src/Finder/index.ts#L28)
+[Finder/index.ts:28](https://github.com/launde/finder-scraper/blob/4aa87da/src/Finder/index.ts#L28)

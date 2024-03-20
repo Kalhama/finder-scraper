@@ -29,7 +29,7 @@
 
 #### Defined in
 
-[YTJ/interfaces.ts:17](https://github.com/launde/finder-scraper/blob/a5244be/src/YTJ/interfaces.ts#L17)
+[YTJ/interfaces.ts:17](https://github.com/launde/finder-scraper/blob/4aa87da/src/YTJ/interfaces.ts#L17)
 
 ___
 
@@ -39,7 +39,7 @@ ___
 
 #### Defined in
 
-[YTJ/interfaces.ts:16](https://github.com/launde/finder-scraper/blob/a5244be/src/YTJ/interfaces.ts#L16)
+[YTJ/interfaces.ts:16](https://github.com/launde/finder-scraper/blob/4aa87da/src/YTJ/interfaces.ts#L16)
 
 ___
 
@@ -49,17 +49,17 @@ ___
 
 #### Defined in
 
-[YTJ/interfaces.ts:15](https://github.com/launde/finder-scraper/blob/a5244be/src/YTJ/interfaces.ts#L15)
+[YTJ/interfaces.ts:15](https://github.com/launde/finder-scraper/blob/4aa87da/src/YTJ/interfaces.ts#L15)
 
 ___
 
 ### results
 
-• **results**: `T`[]
+• **results**: `T`
 
 #### Defined in
 
-[YTJ/interfaces.ts:18](https://github.com/launde/finder-scraper/blob/a5244be/src/YTJ/interfaces.ts#L18)
+[YTJ/interfaces.ts:18](https://github.com/launde/finder-scraper/blob/4aa87da/src/YTJ/interfaces.ts#L18)
 
 ___
 
@@ -69,7 +69,7 @@ ___
 
 #### Defined in
 
-[YTJ/interfaces.ts:14](https://github.com/launde/finder-scraper/blob/a5244be/src/YTJ/interfaces.ts#L14)
+[YTJ/interfaces.ts:14](https://github.com/launde/finder-scraper/blob/4aa87da/src/YTJ/interfaces.ts#L14)
 
 ___
 
@@ -79,7 +79,7 @@ ___
 
 #### Defined in
 
-[YTJ/interfaces.ts:13](https://github.com/launde/finder-scraper/blob/a5244be/src/YTJ/interfaces.ts#L13)
+[YTJ/interfaces.ts:13](https://github.com/launde/finder-scraper/blob/4aa87da/src/YTJ/interfaces.ts#L13)
 
 ___
 
@@ -89,7 +89,7 @@ ___
 
 #### Defined in
 
-[YTJ/interfaces.ts:11](https://github.com/launde/finder-scraper/blob/a5244be/src/YTJ/interfaces.ts#L11)
+[YTJ/interfaces.ts:11](https://github.com/launde/finder-scraper/blob/4aa87da/src/YTJ/interfaces.ts#L11)
 
 ___
 
@@ -99,4 +99,4 @@ ___
 
 #### Defined in
 
-[YTJ/interfaces.ts:12](https://github.com/launde/finder-scraper/blob/a5244be/src/YTJ/interfaces.ts#L12)
+[YTJ/interfaces.ts:12](https://github.com/launde/finder-scraper/blob/4aa87da/src/YTJ/interfaces.ts#L12)

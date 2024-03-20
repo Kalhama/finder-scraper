@@ -1,6 +1,6 @@
 import { program } from 'commander'
 import * as fs from 'fs'
-import Papa from 'papaparse'
+import * as Papa from 'papaparse'
 
 import { Finder, FinderCompany } from '../Finder/index.js'
 import { YTJ, YTJCompanyDetails } from '../YTJ/index.js'
