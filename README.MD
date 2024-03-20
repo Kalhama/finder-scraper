@@ -1,5 +1,7 @@
 # finder-scraper
 
+Työkalu yrityksen tietojen hakuun Finderistä ja YTJ:n avoimesta rajapinnasta
+
 ## CLI
 
 `npx finder-scraper <FINDER_SEARCH_URL> <output.csv>`
