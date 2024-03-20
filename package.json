@@ -8,8 +8,9 @@
   "license": "MIT",
   "scripts": {
     "start": "ts-node src/index.ts",
-    "build": "tsc",
-    "docs": "typedoc --plugin typedoc-plugin-markdown src/index.ts"
+    "build": "rm -r dist/ && tsc",
+    "docs": "typedoc --plugin typedoc-plugin-markdown src/index.ts",
+    "prepublish": "rm -r dist/ && tsc"
   },
   "dependencies": {
     "axios": "^1.4.0",
