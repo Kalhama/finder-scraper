@@ -1,6 +1,6 @@
 # finder-scraper
 
-Työkalu yrityksen tietojen hakuun Finderistä ja YTJ:n avoimesta rajapinnasta
+Työkalu yritystietojen hakuun Finderistä ja YTJ:n avoimesta rajapinnasta
 
 ## CLI
 
