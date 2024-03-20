@@ -6,13 +6,7 @@
 
 ## Käyttö osana koodia
 
-1. `git clone https://github.com/Kalhama/finder-scraper`
-2. cd `finder-scraper`
-3. `pnpm install && pnpm build`
-4. `cd ../toinen-projekti`
-5. `pnpm add ../finder-scraper`
-6. `touch index.ts`
-7. Lisää tiedostoon index.js alla oleva koodi
+`pnpm add finder-scraper`
 
 ```typescript
 import { Finder, YTJ } from 'finder-scraper'
