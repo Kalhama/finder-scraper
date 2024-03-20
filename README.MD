@@ -1,7 +1,5 @@
 # finder-scraper
 
-## Documentation
-
 ## CLI
 
 `npx finder-scraper <FINDER_SEARCH_URL> <output.csv>`
