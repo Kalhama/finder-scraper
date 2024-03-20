@@ -1,7 +1,7 @@
 import axios from 'axios'
 import * as cheerio from 'cheerio'
 
-export type GetCompanyReturn = Promise<{
+export type FinderCompany = {
   name: string
   companyType: string
   location: string
@@ -16,7 +16,7 @@ export type GetCompanyReturn = Promise<{
     operatingProfit: string[]
     shareholdersEquity: string[]
   }
-}>
+}
 
 export class Finder {
   /**
@@ -29,8 +29,6 @@ export class Finder {
     baseURL: string,
     page: number
   ): Promise<string[]> {
-    const links = []
-
     const url = `${baseURL}&page=${page}`
     const headers = {
       'User-Agent':
@@ -65,9 +63,7 @@ export class Finder {
       })
       .toArray()
 
-    links.push(...linksOnPage)
-
-    return links
+    return linksOnPage
   }
 
   /**
@@ -75,7 +71,7 @@ export class Finder {
    * @param {string} path - URL without base. ex. `/Televiestint%C3%A4+televiestint%C3%A4palvelut/Nokia+Oyj/Espoo/yhteystiedot/159843`
    * @returns {GetCompanyReturn}
    */
-  public static async getCompany(path: string): GetCompanyReturn {
+  public static async getCompany(path: string): Promise<FinderCompany> {
     const headers = {
       'User-Agent':
         'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/115.0',

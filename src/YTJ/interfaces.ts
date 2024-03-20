@@ -1,4 +1,4 @@
-export interface BisCompany {
+export interface YTJCompany {
   businessId: string
   registrationDate: string
   companyForm?: string
@@ -15,20 +15,20 @@ export interface YTJRespomse<T> {
   previousResultsUri: string | null
   nextResultsUri: string | null
   exceptionNoticeUri: string | null
-  results: T[]
+  results: T
 }
 
-export interface BisCompanyDetails {
-  names: BisCompanyName[]
-  auxiliaryNames?: BisCompanyName[]
-  addresses?: BisAddress[]
-  companyForms?: BisCompanyForm[]
-  liquidations?: BisCompanyLiquidation[]
-  businessLines?: BisCompanyBusinessLine[]
-  languages?: BisCompanyLanguage[]
-  registeredOffices?: BisCompanyRegisteredOffice[]
-  contactDetails?: BisCompanyContactDetail[]
-  registeredEntries?: BisCompanyRegisteredEntry[]
+export interface YTJCompanyDetails {
+  names: YTJCompanyName[]
+  auxiliaryNames?: YTJCompanyName[]
+  addresses?: YTJAddress[]
+  companyForms?: YTJCompanyForm[]
+  liquidations?: YTJCompanyLiquidation[]
+  businessLines?: YTJCompanyBusinessLine[]
+  languages?: YTJCompanyLanguage[]
+  registeredOffices?: YTJCompanyRegisteredOffice[]
+  contactDetails?: YTJCompanyContactDetail[]
+  registeredEntries?: YTJCompanyRegisteredEntry[]
   businessId: string
   registrationDate: string
   companyForm?: string
@@ -36,7 +36,7 @@ export interface BisCompanyDetails {
   name: string
 }
 
-export interface BisCompanyName {
+export interface YTJCompanyName {
   source?: number
   order: number
   version: number
@@ -46,7 +46,7 @@ export interface BisCompanyName {
   language?: string
 }
 
-export interface BisAddress {
+export interface YTJAddress {
   source?: number
   version: number
   registrationDate: string
@@ -60,7 +60,7 @@ export interface BisAddress {
   country?: string
 }
 
-export interface BisCompanyForm {
+export interface YTJCompanyForm {
   source?: number
   version: number
   registrationDate: string
@@ -70,7 +70,7 @@ export interface BisCompanyForm {
   type: string
 }
 
-export interface BisCompanyLiquidation {
+export interface YTJCompanyLiquidation {
   source?: number
   version: number
   registrationDate: string
@@ -80,7 +80,7 @@ export interface BisCompanyLiquidation {
   type: string
 }
 
-export interface BisCompanyBusinessLine {
+export interface YTJCompanyBusinessLine {
   source?: number
   order: number
   version: number
@@ -90,7 +90,7 @@ export interface BisCompanyBusinessLine {
   language?: string
 }
 
-export interface BisCompanyLanguage {
+export interface YTJCompanyLanguage {
   source?: number
   version: number
   registrationDate: string
@@ -99,7 +99,7 @@ export interface BisCompanyLanguage {
   language?: string
 }
 
-export interface BisCompanyRegisteredOffice {
+export interface YTJCompanyRegisteredOffice {
   source?: number
   order: number
   version: number
@@ -109,7 +109,7 @@ export interface BisCompanyRegisteredOffice {
   language?: string
 }
 
-export interface BisCompanyContactDetail {
+export interface YTJCompanyContactDetail {
   source?: number
   version: number
   registrationDate: string
@@ -119,7 +119,7 @@ export interface BisCompanyContactDetail {
   type: string
 }
 
-export interface BisCompanyRegisteredEntry {
+export interface YTJCompanyRegisteredEntry {
   description: string
   status: number
   registrationDate: string
@@ -129,7 +129,7 @@ export interface BisCompanyRegisteredEntry {
   authority: number
 }
 
-export interface BisCompanyBusinessIdChange {
+export interface YTJCompanyBusinessIdChange {
   source?: number
   description: string
   reason: string
