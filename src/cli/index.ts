@@ -1,3 +1,4 @@
+import * as cliProgress from 'cli-progress'
 import { program } from 'commander'
 import * as fs from 'fs'
 import * as Papa from 'papaparse'
@@ -45,12 +46,20 @@ program
   .arguments('<url>')
   .arguments('<output>')
   .action(async (url: string, output: string) => {
+    const { companies: companiesCount } = await Finder.searchCompaniesCount(url)
+
+    const bar = new cliProgress.SingleBar(
+      {},
+      cliProgress.Presets.shades_classic
+    )
+
+    bar.start(companiesCount, 0)
+
     let companiesInPage: string[] = []
     let page = 1
     let companies: Array<ReturnType<typeof flattenCompanyData>> = []
     do {
       companiesInPage = await Finder.searchCompanies(url, page)
-      await delay(5000)
       page++
 
       for (const company of companiesInPage) {
@@ -58,8 +67,12 @@ program
         const { results: YTJData } = await YTJ.getCompany(finderData.companyid)
         const flatCompanyData = flattenCompanyData(finderData, YTJData)
         companies.push(flatCompanyData)
+        bar.increment()
+        await delay(5000)
       }
     } while (companiesInPage.length !== 0)
+
+    bar.stop()
 
     const csv = Papa.unparse(companies)
     fs.writeFileSync('companies.csv', csv)

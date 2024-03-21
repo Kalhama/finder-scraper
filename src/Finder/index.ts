@@ -19,17 +19,12 @@ export type FinderCompany = {
 }
 
 export class Finder {
-  /**
-   *
-   * @param {string} baseURL - URL with what query param ex. https://www.finder.fi/search?what=IT-palvelut+Espoo
-   * @param {number} page - page number of results
-   * @returns {Promise<string[]>} company paths's. ex. `["/Televiestint%C3%A4+televiestint%C3%A4palvelut/Nokia+Oyj/Espoo/yhteystiedot/159843"]`
-   */
-  public static async searchCompanies(
+  private static async searchPage(
     baseURL: string,
     page: number
-  ): Promise<string[]> {
+  ): Promise<string> {
     const url = `${baseURL}&page=${page}`
+
     const headers = {
       'User-Agent':
         'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/115.0',
@@ -48,11 +43,52 @@ export class Finder {
       'Sec-Fetch-User': '?1',
     }
 
-    const data = await axios
-      .get(url, {
-        headers,
+    try {
+      const html = await axios
+        .get(url, {
+          headers,
+        })
+        .then((res) => res.data as string)
+      return html
+    } catch (e) {
+      console.error(e.message)
+    }
+  }
+
+  public static async searchCompaniesCount(baseURL: string) {
+    const data = await Finder.searchPage(baseURL, 1)
+
+    // parse pages
+    const $ = cheerio.load(data)
+
+    const pages = $(
+      '.SearchResultList__PageSelection > ul:last-of-type > li:last-of-type > a'
+    )
+      .map(function () {
+        const pageNumber = $(this).text()
+        return Number(pageNumber)
       })
-      .then((res) => res.data)
+      .toArray()[0]
+
+    const linksOnLastPage = await Finder.searchCompanies(baseURL, pages)
+
+    return {
+      pages,
+      companies: (pages - 1) * 25 + linksOnLastPage.length,
+    }
+  }
+
+  /**
+   *
+   * @param {string} baseURL - URL with what query param ex. https://www.finder.fi/search?what=IT-palvelut+Espoo
+   * @param {number} page - page number of results
+   * @returns {Promise<string[]>} company paths's. ex. `["/Televiestint%C3%A4+televiestint%C3%A4palvelut/Nokia+Oyj/Espoo/yhteystiedot/159843"]`
+   */
+  public static async searchCompanies(
+    baseURL: string,
+    page: number
+  ): Promise<string[]> {
+    const data = await Finder.searchPage(baseURL, page)
 
     // parse pages
     const $ = cheerio.load(data)
