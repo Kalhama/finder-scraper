@@ -61,14 +61,15 @@ export class Finder {
     // parse pages
     const $ = cheerio.load(data)
 
-    const pages = $(
-      '.SearchResultList__PageSelection > ul:last-of-type > li:last-of-type > a'
-    )
-      .map(function () {
-        const pageNumber = $(this).text()
-        return Number(pageNumber)
-      })
-      .toArray()[0]
+    const pages =
+      $(
+        '.SearchResultList__PageSelection > ul:last-of-type > li:last-of-type > a'
+      )
+        .map(function () {
+          const pageNumber = $(this).text()
+          return Number(pageNumber)
+        })
+        .toArray()[0] ?? 1
 
     const linksOnLastPage = await Finder.searchCompanies(baseURL, pages)
 
