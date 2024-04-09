@@ -1,7 +1,7 @@
 import * as cliProgress from 'cli-progress'
 import { program } from 'commander'
 import * as fs from 'fs'
-import * as Papa from 'papaparse'
+import papa from 'papaparse'
 
 import { Finder, FinderCompany } from '../Finder/index.js'
 import { YTJ, YTJCompanyDetails } from '../YTJ/index.js'
@@ -74,7 +74,7 @@ program
 
     bar.stop()
 
-    const csv = Papa.unparse(companies)
+    const csv = papa.unparse(companies)
     fs.writeFileSync('companies.csv', csv)
     process.exit()
   })

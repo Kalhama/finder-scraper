@@ -40,9 +40,6 @@ devDependencies:
   '@types/cli-progress':
     specifier: ^3.11.5
     version: 3.11.5
-  '@types/papaparse':
-    specifier: ^5.3.14
-    version: 5.3.14
   eslint:
     specifier: ^8.57.0
     version: 8.57.0
@@ -566,12 +563,6 @@ packages:
     resolution: {integrity: sha512-dHM6ZxwlmuZaRmUPfv1p+KrdD1Dci04FbdEm/9wEMouFqxYoFl5aMkt0VMAUtYRQDyYvD41WJLukhq/ha3YuTw==}
     dependencies:
       undici-types: 5.26.5
-    dev: true
-
-  /@types/papaparse@5.3.14:
-    resolution: {integrity: sha512-LxJ4iEFcpqc6METwp9f6BV6VVc43m6MfH0VqFosHvrUgfXiFe6ww7R3itkOQ+TCK6Y+Iv/+RnnvtRZnkc5Kc9g==}
-    dependencies:
-      '@types/node': 20.11.30
     dev: true
 
   /@types/semver@7.5.8:
