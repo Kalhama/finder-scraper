@@ -1,0 +1,4 @@
+name,companyType,location,companyid,address,mail,site,financialData,yearEnd,revenue,employees,operatingProfit,shareholdersEquity,ytjemail,ytjphone
+Vertics Oy,Osakeyhtiö,Espoo,2819846-9,"Miestentie 5-9, 02150 Espoo",hello@vertics.co,vertics.co,,2022/12,1597,15,56,,,
+Vertic Oy,Osakeyhtiö,Helsinki,0620754-7,"Kiikkupaikantie 7, 28600 Pori",sales@vertic.fi,www.vertic.fi,,2022/12,264,,-16,,,
+Vertica Oy,Osakeyhtiö,Helsinki,0738278-5,"Kehäkukantie 2, 00720 Helsinki",martti.pullinen@vertica.fi,,,2023/12,14,,6,,,
