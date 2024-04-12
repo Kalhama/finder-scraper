@@ -1,6 +1,6 @@
-import fetch, { Headers } from 'node-fetch'
 import queryString from 'query-string'
 
+import { fetchRetry } from '../utils/fetch-retry.js'
 import { YTJCompany, YTJCompanyDetails, YTJRespomse } from './interfaces.js'
 
 export type CompanyForm = 'AOY' | 'OYJ' | 'OY' | 'OK' | 'VOJ'
@@ -14,7 +14,7 @@ export class YTJ {
   public static async getCompany(
     businessId: string
   ): Promise<YTJRespomse<YTJCompanyDetails>> {
-    return fetch(`https://avoindata.prh.fi/bis/v1/${businessId}`, {
+    return fetchRetry(`https://avoindata.prh.fi/bis/v1/${businessId}`, {
       headers: new Headers({
         Accept: 'application/json',
       }),
@@ -44,7 +44,7 @@ export class YTJ {
       companyForm,
     }
 
-    return fetch(
+    return fetchRetry(
       `https://avoindata.prh.fi/YTJ/v1${queryString.stringify(query)}`,
       {
         headers: new Headers({

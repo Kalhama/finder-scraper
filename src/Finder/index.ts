@@ -1,5 +1,6 @@
-import axios from 'axios'
 import * as cheerio from 'cheerio'
+
+import { fetchRetry } from '../utils/fetch-retry'
 
 export type FinderCompany = {
   name: string
@@ -25,7 +26,7 @@ export class Finder {
   ): Promise<string> {
     const url = `${baseURL}&page=${page}`
 
-    const headers = {
+    const headers = new Headers({
       'User-Agent':
         'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/115.0',
       Accept:
@@ -41,14 +42,13 @@ export class Finder {
       'Sec-Fetch-Mode': 'navigate',
       'Sec-Fetch-Site': 'none',
       'Sec-Fetch-User': '?1',
-    }
+    })
 
     try {
-      const html = await axios
-        .get(url, {
-          headers,
-        })
-        .then((res) => res.data as string)
+      const html = await fetchRetry(url, {
+        headers,
+        method: 'GET',
+      }).then((res) => res.text())
       return html
     } catch (e) {
       console.error(e.message)
@@ -109,7 +109,7 @@ export class Finder {
    * @returns {GetCompanyReturn}
    */
   public static async getCompany(path: string): Promise<FinderCompany> {
-    const headers = {
+    const headers = new Headers({
       'User-Agent':
         'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/115.0',
       Accept:
@@ -125,10 +125,12 @@ export class Finder {
       'Sec-Fetch-Mode': 'navigate',
       'Sec-Fetch-Site': 'none',
       'Sec-Fetch-User': '?1',
-    }
+    })
 
     const url = `https://www.finder.fi${path}`
-    const html = await axios.get(url, { headers }).then((res) => res.data)
+    const html = await fetchRetry(url, { headers, method: 'GET' }).then((res) =>
+      res.text()
+    )
 
     const $ = cheerio.load(html)
     const name = $('.Profile__Name').text()

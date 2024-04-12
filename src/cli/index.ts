@@ -5,10 +5,7 @@ import papa from 'papaparse'
 
 import { Finder, FinderCompany } from '../Finder/index.js'
 import { YTJ, YTJCompanyDetails } from '../YTJ/index.js'
-
-const delay = async (time = 5000) => {
-  await new Promise((resolve) => setTimeout(resolve, time))
-}
+import { delay } from '../utils/delay.js'
 
 const flattenCompanyData = (
   finderdata: FinderCompany,
