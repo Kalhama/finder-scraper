@@ -27,11 +27,11 @@ const flattenCompanyData = (
     ...finderdata,
     financialData: '',
     ...latestFinancials,
-    ytjemail: new Buffer(
+    ytjemail: Buffer.from(
       ytjdata?.contactDetails?.find((d) => d.type === 'email')?.value || '',
       'base64'
     ).toString('utf8'),
-    ytjphone: new Buffer(
+    ytjphone: Buffer.from(
       ytjdata?.contactDetails?.find((d) => d.type === 'telephone')?.value ||
         ytjdata?.contactDetails?.find((d) => d.type === 'mobilePhone')?.value ||
         '',
