@@ -19,12 +19,13 @@ def retry_request(url, method="GET", max_retries=5, **kwargs):
     - Response object if the request is successful.
     - None if all retries fail.
     """
-    base_delay = 2
+    base_delay_multiplier = 2
+    min_delay = 1
 
     for attempt in range(max_retries):
         try:
             print(f"Attempt {attempt + 1} of {max_retries}: {url}")
-            sleep(base_delay**base_delay)
+            sleep(attempt * attempt * base_delay_multiplier + min_delay)
             response = requests.request(method, url, **kwargs)
             response.raise_for_status()  # Raises an HTTPError for bad responses
             return response
