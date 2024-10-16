@@ -1,0 +1,8 @@
+[flake8]
+ignore = E501 # disable line length
+exclude =
+    .git,
+    __pycache__,
+    data,
+    venv
+max-complexity = 10
