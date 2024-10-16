@@ -165,6 +165,8 @@ def scrape_company_data(url):
     soup = BeautifulSoup(html, "html.parser")
     company_name = get_company_name(soup)
 
+    kotipaikka_el = get_table_value_element(soup, "Kotipaikka")
+
     return {
         "linkki": url,
         "yritys": company_name,
@@ -173,7 +175,7 @@ def scrape_company_data(url):
         "liikevaihto": element_to_int(get_table_value_element(soup, "Liikevaihto")),
         "liikevoitto": element_to_int(get_table_value_element(soup, "Liikevoitto")),
         "nettotulos": element_to_int(get_table_value_element(soup, "Nettotulos")),
-        "kotipaikka": get_table_value_element(soup, "Kotipaikka").get_text(strip=True),
+        "kotipaikka": kotipaikka_el.get_text(strip=True) if kotipaikka_el else None,
     }
 
 
