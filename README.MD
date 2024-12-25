@@ -1,3 +1,7 @@
+> [!WARNING]  
+> Paketti on arkistoitu, koska Finderin käyttöliittymärakenne on muuttunut viimeisen päivityksen jäljeen ja myös YTJ rajapinta on muuttunut. En ehdi ainakaan juuri nyt korjata näitä ongelmia.
+
+
 # finder-scraper
 
 Työkalu yritystietojen hakuun Finderistä ja YTJ:n avoimesta rajapinnasta
